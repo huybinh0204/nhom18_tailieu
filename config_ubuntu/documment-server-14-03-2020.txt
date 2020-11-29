@@ -1,0 +1,1010 @@
++Tài khoản domain web88.vn:
+https://access.pavietnam.vn
+username: web88.vn
+pass: AQsjH5Yhp473
+
+----------------------------------------------
+
++Tài khoản quản lý vps thông qua giao thức ssh:
+ip: 103.101.162.209
+username: root
+pass: talentwins2018@@%2020%/VPS^^
+
+---------------
+TK SSH server: 35.220.232.226
+user: root
+pass: vanquocnb@gmail.com
+
+TK mysql :
+user : root
+pass: anhquoc12@123$#VPS@@
+
+---------------------------------------------------
+B1: trỏ domain !.
+B2: cấu hình trỏ về thư mục trên server.:
+	Code web lưu ở: /data/www
+	------------------------------------------------------------------------------------------------------
+
+	+Nội dung file cấu hình apache2  để trỏ về thư mục web: 
+	    . cấu trúc file:  ten_mien.conf    VD: suntone.web88.vn.conf
+	    . File cấu hình lưu ở: /etc/apache2/sites-enabled/
+	Nội dung file ten_mien.conf như sau Đối với tên miền CHƯA có đăng ký SSL ( SSL là chứng chỉ bảo mật):
+		----------
+		#listen 80
+		<VirtualHost *:80>
+		    ServerName sonnbdev.tk
+		    ServerAlias www.sonnbdev.tk
+
+		    DocumentRoot /data/www/sonnbdev.tk
+		    ErrorLog /var/log/apache2/sonnbdev.tk_error.log
+		    CustomLog /var/log/apache2/sonnbdev.tk_access.log combined
+
+		 <Directory "/data/www/sonnbdev.tk/">
+		    Options FollowSymLinks
+		    AllowOverride All
+		    Order allow,deny
+		    Allow from all
+		    Require all granted
+		 </Directory>
+		</VirtualHost>
+	 	--------------------------------
+	Nội dung file ten_mien.conf như sau Đối với tên miền CÓ đăng ký SSL ( SSL là chứng chỉ bảo mật):
+	 	-------------
+
+		#listen 443
+		<VirtualHost *:443>
+		    ServerName siti.vn
+		    ServerAlias www.siti.vn
+
+		    DocumentRoot /data/www/siti.vn/public
+		    ErrorLog /var/log/apache2/siti.vn_error.log
+		    CustomLog /var/log/apache2/siti.vn_access.log combined
+
+		    SSLEngine on
+		    SSLCertificateFile /etc/ssl/certs/siti.vn.pem
+		    SSLCertificateKeyFile /etc/ssl/private/siti.vn.key
+		 <Directory "/data/www/siti.vn/public/">
+		    Options FollowSymLinks
+		    AllowOverride All
+		    Allow from all
+		    Require all granted
+		 </Directory>
+		</VirtualHost>
+----------------------------------
+B3: restart lai apache2 bằng lệnh:
+		service apache2 restart
+
+B4: tạo thư mục code của web nằm trong /data/www
+		Ví dụ : suntone.web88.vn (đường dẫn : /data/www/suntone.web88.vn)
+
+B5: upcode vào thư mục đó
+		1. Nếu đẩy từ git thì dùng các lệnh sau:
+			tu tai khoan root gõ các lệnh như sau
+			. b1. cd <duong_dan_den_thu_muc_web>. 
+			    ví dụ:  cd /data/www/demo.web88.vn/
+			. b2. git init
+			. b3. git remote add origin duong_dan_github
+			. b4. git remote -v
+			. b5. git pull origin master
+
+		2. Nếu up code bằng file .zip thì tải file .zip lên và giải nén file đó.
+			Lệnh giải nén và nén thư mục:
+			. 0.1. Cài môi trường trên ubuntu để server có thẻ đọc ghi được file .zip
+			    # sudo apt-get install zip unzip
+			. 0.2. truy cập vào thư mục chứa thư mục cần nén:
+				cd duong_dan_web
+			. 1.1 Nén một thư mục, sử dụng:
+			    # zip -r folder.zip folder
+			. 1.2 Giải nén, sử dụng:
+			    # unzip file.zip
+			. 1.3 Giải nén thư mục của mình sang một file khác
+    			# unzip my_photos.zip -d ./my_directory/
+
+		3. Với Wordpress để đỡ rắc rối e dùng plugin Duplicator tạo bản sao. thì sẽ ko phải sửa db của nó.
+			. b1: truy cập vào admin và login với đường dẫn: ten_mien/wp-admin
+			. b2: Nhìn trên thanh menu sidebar -> chọn "Plugin" -> Cài Plugin
+			. b3: tìm kiếm và cài đặt Plugin: Duplicator.
+			. b4: tạo bản sao với plugin
+			. b5: tải xuống 2 file installer.php và ten_file_code.zip
+			. b6: đưa vào thư mục mới để tạo web mới /data/www/ten_mien_website/
+			. b7: tạo db ở (B6) và phân quyền ở (B7).
+			. b8: tiến hành truy cập và cài đặt với url: ten_mien_website/installer.php
+		4. Với wordpress không Duplicator tạo bản sao. thì update code bằng file zip và giải nén như mục (2.)
+
+----------------------------------------------
+B6: tiến hành tạo csdl
+	------Mẫu-------------
+		mysql -u root -p 		//truy cập tai khoan mysql với tên là root
+	    password_tai_khoan_root 	//Mật khẩu của tài khoản root
+	    GRANT ALL PRIVILEGES ON ten_user_database.* To 'ten_user_database'@'localhost' IDENTIFIED BY 'pass_user_database';	//tại user quản ly rieng 1 database
+	    exit;								//Lệnh thoát
+	    mysql -u ten_user_database -p 		//truy cập tai khoan mysql với tên vừa đặt ten_user_database
+	    pass_user_database					//NHập password vừa tạo ở lệnh trên
+	    create database ten_database 		//Tạo database mới
+    ----Ví dụ-----------------
+	    mysql -u root -p
+	    sonnb@Dev#3005%/VPS^^
+	    GRANT ALL PRIVILEGES ON holuuvietnam.* To 'holuuvietnam'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+	    exit;
+	    mysql -u holuuvietnam -p
+	    sonnb@Dev3005VPS
+	    create database holuuvietnam
+
+---------------------
+	Ngoài ra, Có một số lệnh cơ bản trong mysql:
+        CAU LENH SQL CO BAN
+		1. INSERT db:
+		    INSERT INTO `banners`(`id`, `banner`, `content`, `url`, `product_id`, `location`) VALUES ('2','1572583034_product_sungvanbulong.jpg','','http://haithu.com/loaisanpham/sung-van-bulong-vit-hoi-2019-08-14-083332html','8','2');
+		2. truy van
+		    SELECT * FROM bz_options WHERE option_name='home';  //truy van dien hinh
+		3. Xoa databases
+		    mysql -u ten_csdl_cua_ban -p
+		    mat_khau_csdl
+		    show databases;
+		    use ten_csdl;
+		    drop database teb_csdl_can_xoa;
+		4. import file .sql
+		    source /data/www/demo.web88.vn/file.sql;
+		5. export file .sql trên server
+		    mysqldump -u [username] -p [database name] > [database name].sql
+		    vd: mysqldump -u blinh -p blinh > blinh.sql
+		    . mysqldump -u blinh -p blinh > /data/www/blinh.sql
+		    . mysqldump -u kidsnowshop -p kidsnowshop > /data/www/kidsnowshop.sql
+		    . mysqldump -u face2face -p face2face > /data/www/face2face_21-02-2020.sql
+		    . mysqldump -u seotop -p seotop > /data/www/seotop.web88.vn/seotop_07-03-2020.sql
+		    . mysqldump -u kidsnowshop -p kidsnowshop > /data/www/kidsnow.vn/kidsnowshop_14-03-2020.sql
+            . mysqldump -u nguyentatthanh -p nguyentatthanh > /data/www/nguyentatthanhtx.edu.vn/nguyentatthanhtx.edu.vn_23-03-2020.sql
+
+		6. Tạo user và thiết lập quyền cho user
+		    Sử dụng lệnh sau để thiết lập đầy đủ các quyền cho một user
+		        grant all on dbname.* to username@localhost;
+
+		    Tất nhiên trong thực tế chắc chắn bạn cần giới hạn một số quyền của user, khi đó hãy sử dụng lệnh sau
+		        grant SELECT on dbname.* to username@localhost; // SELECT là quyền
+
+		    Danh sách các quyền bạn có thể thiết lập cho user
+		        ALL                         INDEX
+		        ALTER                       GRANT OPTION
+		        CREATE VIEW                 DROP
+		        CREATE                      DELETE
+		        INSERT                      SELECT
+		        SHOW VIEW                   TRIGGER
+		        UPDATE
+
+		    Sau khi thiết lập các quyền cho user, bạn cần làm thêm một việc là thiết lập mật khẩu cho user
+		        set password for username@localhost = password('mat_khau');
+
+---------------
+---------------------------------------------------------------------
+B7. Cấp quyền cho thư mục
+		1. Với dự án LARAVEL:
+
+			chown -R www-data:www-data /data/www/tldcake.tk/storage/
+			chown -R www-data:www-data /data/www/tldcake.tk/resources/
+			chown -R www-data:www-data /data/www/tldcake.tk/public/
+			chown -R www-data:www-data /data/www/tldcake.tk/
+
+		2. Với dự án WORDPRESS:
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/wp-content
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/wp-includes
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/wp-admin
+
+		3. Lưu ý: Một số con web clone của a hải gửi thì có thể nó sẽ ko theo cấu trúc này đâu anh nhé. Lúc đấy từ biến phân quyền cho các thư mục
+		
+		4. nodejs
+			chown -R www-data:www-data /data/www/chatme.gq/views/
+            		chown -R www-data:www-data /data/www/chatme.gq/routes/
+            		chown -R www-data:www-data /data/www/chatme.gq/public/
+            		chown -R www-data:www-data /data/www/chatme.gq/
+--------------------------------------------------------------------
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+---------------
+Ngay 08-02-2020: (Đây là các câu lênh e dùng từ ngày 08-02-2020: a chỉ cần xem qua nếu cần dùng thôi, ko cần hiểu đâu vì đoạn này e viết ko rõ ràng nên a dễ bị rối đấy)
+
+    mysql -u root -p
+
+    GRANT ALL PRIVILEGES ON wp_edu.* To 'wp_edu'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan.* To 'wp_batdongsan'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan1.* To 'wp_batdongsan1'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan2.* To 'wp_batdongsan2'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan3.* To 'wp_batdongsan3'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan4.* To 'wp_batdongsan4'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan5.* To 'wp_batdongsan5'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan6.* To 'wp_batdongsan6'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan7.* To 'wp_batdongsan7'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON wp_batdongsan8.* To 'wp_batdongsan8'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    GRANT ALL PRIVILEGES ON kuteshop.* To 'kuteshop'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+
+    exit;
+
+    mysql -u wp_batdongsan -p//phai xoa db nay vi ko dung den
+
+    mysql -u wp_batdongsan1 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan1;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan1.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan1.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan1.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan1.web88.vn/wp-admin
+
+    mysql -u wp_batdongsan2 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan2;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan2.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan2.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan2.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan2.web88.vn/wp-admin
+
+    mysql -u wp_batdongsan3 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan3;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan3.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan3.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan3.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan3.web88.vn/wp-admin
+
+    mysql -u wp_batdongsan4 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan4;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan4.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan4.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan4.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan4.web88.vn/wp-admin
+
+    mysql -u wp_batdongsan5 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan5;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan5.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan5.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan5.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan5.web88.vn/wp-admin
+
+    mysql -u wp_batdongsan6 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan6;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan6.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan6.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan6.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan6.web88.vn/wp-admin
+
+    mysql -u wp_batdongsan7 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan7;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan7.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan7.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan7.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan7.web88.vn/wp-admin
+
+    mysql -u wp_batdongsan8 -p
+    sonnb@Dev3005VPS
+    create database wp_batdongsan8;
+    exit;
+//  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/wp-batdongsan8.web88.vn/
+    chown -R www-data:www-data /data/www/wp-batdongsan8.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp-batdongsan8.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp-batdongsan8.web88.vn/wp-admin
+
+    mysql -u wp_edu -p
+    sonnb@Dev3005VPS
+    show databases;
+    create database wp_edu;
+    exit;
+    //  cap quyen truy cap: ve root
+    chown -R www-data:www-data /data/www/edu.web88.vn/
+    chown -R www-data:www-data /data/www/edu.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/edu.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/edu.web88.vn/wp-admin
+
+//import db
+    //error
+    mysql -u wp_batdongsan2 -p
+    sonnb@Dev3005VPS
+    show databases;
+    use wp_batdongsan2;
+    source /data/www/wp-batdongsan2.web88.vn/wp_batdongsan2.sql
+    exit;
+
+    mysql -u wp_batdongsan3 -p
+    sonnb@Dev3005VPS
+    show databases;
+    use wp_batdongsan3;
+    source /data/www/wp-batdongsan3.web88.vn/wp_batdongsan3.sql
+    exit;
+
+    //error
+    mysql -u wp_batdongsan4 -p
+    sonnb@Dev3005VPS
+    show databases;
+    use wp_batdongsan4;
+    source /data/www/wp-batdongsan4.web88.vn/wp_batdongsan4.sql
+    exit;
+
+    //error
+    mysql -u wp_batdongsan5 -p
+    sonnb@Dev3005VPS
+    show databases;
+    use wp_batdongsan5;
+    source /data/www/wp-batdongsan5.web88.vn/wp_batdongsan5.sql
+    exit;
+
+    mysql -u wp_batdongsan6 -p
+    sonnb@Dev3005VPS
+    show databases;
+    use wp_batdongsan6;
+    source /data/www/wp-batdongsan6.web88.vn/wp_batdongsan6.sql
+    exit;
+
+    mysql -u wp_batdongsan7 -p
+    sonnb@Dev3005VPS
+    show databases;
+    use wp_batdongsan7;
+    source /data/www/wp-batdongsan7.web88.vn/wp_batdongsan7.sql
+    exit;
+
+    mysql -u wp_batdongsan8 -p
+    sonnb@Dev3005VPS
+    show databases;
+    use wp_batdongsan8;
+    source /data/www/wp-batdongsan8.web88.vn/wp_batdongsan8.sql
+    exit;
+---------------------------------
+kuteshop
+
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON kuteshop.* To 'kuteshop'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u kuteshop -p
+    sonnb@Dev3005VPS
+    create database kuteshop
+    chown -R www-data:www-data /data/www/kuteshop.web88.vn/
+    chown -R www-data:www-data /data/www/kuteshop.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/kuteshop.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/kuteshop.web88.vn/wp-admin
+
+    //version.2
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON kuteshop.* To 'kuteshop'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u kuteshop -p
+    sonnb@Dev3005VPS
+    create database kuteshop
+
+backup laij csdl
+    mysqldump -u kuteshop -p kuteshop > /data/www/kuteshop_26-02-2020.sql
+    sonnb@Dev3005VPS
+    
+    chown -R www-data:www-data /data/www/wp_kuteshop.web88.vn/
+    chown -R www-data:www-data /data/www/wp_kuteshop.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp_kuteshop.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp_kuteshop.web88.vn/wp-admin
+
+
+-----------------
+naptien.web88.vn
+
+    chown -R www-data:www-data /data/www/naptien.web88.vn/
+    chown -R www-data:www-data /data/www/naptien.web88.vn/Naptien/
+
+----------------
+hrc.web88.vn
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON hrc.* To 'hrc'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u hrc -p
+    sonnb@Dev3005VPS
+    create database hrc
+
+    chown -R www-data:www-data /data/www/hrc.web88.vn/
+    chown -R www-data:www-data /data/www/hrc.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/hrc.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/hrc.web88.vn/wp-admin
+
+--------------------------
+1v.com.vn
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON 1v.* To '1v'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u 1v -p
+    sonnb@Dev3005VPS
+    create database 1v
+
+    chown -R www-data:www-data /data/www/1v.com.vn/
+    chown -R www-data:www-data /data/www/1v.com.vn/wp-content
+    chown -R www-data:www-data /data/www/1v.com.vn/wp-includes
+    chown -R www-data:www-data /data/www/1v.com.vn/wp-admin
+-------------------------
+kidsnow.edu.vn
+
+    chown -R www-data:www-data /data/www/kidsnow.edu.vn/
+    chown -R www-data:www-data /data/www/kidsnow.edu.vn/storage/
+chown -R www-data:www-data /data/www/kidsnow.edu.vn/resources/
+chown -R www-data:www-data /data/www/kidsnow.edu.vn/public/
+--------------------------------------
+face2face.vn
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON face2face.* To 'face2face'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u face2face -p
+    sonnb@Dev3005VPS
+    create database face2face
+
+    chown -R www-data:www-data /data/www/face2face.vn/
+    chown -R www-data:www-data /data/www/face2face.vn/install
+    chown -R www-data:www-data /data/www/face2face.vn/
+    chown -R www-data:www-data /data/www/face2face.vn/
+
+----------
+<VirtualHost *:80>
+    ServerName face2face.vn
+    ServerAlias www.face2face.vn
+    
+    DocumentRoot /data/www/face2face.vn
+    ErrorLog /var/log/apache2/face2face.vn_error.log
+    CustomLog /var/log/apache2/face2face.vn_access.log combined
+    
+ <Directory "/data/www/face2face.vn/">
+    Options FollowSymLinks
+    AllowOverride All
+    Allow from all
+    Require all granted
+ </Directory>
+</VirtualHost>
+----------------------------------------------------
+
+-------------------------
+seo.web88.vn
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON seo.* To 'seo'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u seo -p
+    sonnb@Dev3005VPS
+    create database seo
+
+    chown -R www-data:www-data /data/www/seo.web88.vn/
+    chown -R www-data:www-data /data/www/seo.web88.vn/
+----------
+<VirtualHost *:80>
+    ServerName seo.web88.vn
+    ServerAlias www.seo.web88.vn
+
+    DocumentRoot /data/www/seo.web88.vn
+    ErrorLog /var/log/apache2/seo.web88.vn_error.log
+    CustomLog /var/log/apache2/seo.web88.vn_access.log combined
+
+ <Directory "/data/www/seo.web88.vn/">
+    Options FollowSymLinks
+    AllowOverride All
+    Allow from all
+    Require all granted
+ </Directory>
+</VirtualHost>
+-------------------------
+
+1234------------
+web kidsnow.vn
+
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON kidsnowshop.* To 'kidsnowshop'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u kidsnowshop -p
+    sonnb@Dev3005VPS
+    create database kidsnowshop
+    ---
+    chown -R www-data:www-data /data/www/kidsnow.vn/
+    chown -R www-data:www-data /data/www/kidsnow.vn/install/
+    chown -R www-data:www-data /data/www/kidsnow.vn/assets/
+    chown -R www-data:www-data /data/www/kidsnow.vn/project/
+    chown -R www-data:www-data /data/www/kidsnow.vn/
+
+    ------------------------
+    <VirtualHost *:80>
+        ServerName kidsnow.vn
+        ServerAlias www.kidsnow.vn
+
+        DocumentRoot /data/www/kidsnow.vn
+        ErrorLog /var/log/apache2/kidsnow.vn_error.log
+        CustomLog /var/log/apache2/kidsnow.vn_access.log combined
+
+     <Directory "/data/www/kidsnow.vn/">
+        Options FollowSymLinks
+        AllowOverride All
+        Allow from all
+        Require all granted
+     </Directory>
+    </VirtualHost>
+------------------------
+---------------------
+ld
+        
+
+
+
+        chown -R www-data:www-data /data/www/lp-newace.web88.vn/
+        chown -R www-data:www-data /data/www/lp-demo.web88.vn/
+
+        chown -R www-data:www-data /data/www/lp_newace.web88.vn/DIMENSION
+        chown -R www-data:www-data /data/www/lp_newace.web88.vn/kaplan
+        chown -R www-data:www-data /data/www/lp_newace.web88.vn/sitck-amec-alsc-banmoi
+
+
+----------------
+-----------------------------------------------
+ntt.web88.vn
+    #listen 80
+    <VirtualHost *:80>
+        ServerName ntt.web88.vn
+        ServerAlias www.ntt.web88.vn
+
+        DocumentRoot /data/www/ntt.web88.vn
+        ErrorLog /var/log/apache2/ntt.web88.vn_error.log
+        CustomLog /var/log/apache2/ntt.web88.vn_access.log combined
+
+     <Directory "/data/www/ntt.web88.vn/">
+        Options FollowSymLinks
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+        Require all granted
+     </Directory>
+    </VirtualHost>
+    ----------
+    mysql -u root -p
+    anhquoc12@123$#VPS@@
+    GRANT ALL PRIVILEGES ON ntt.* To 'ntt'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u ntt -p
+    sonnb@Dev3005VPS
+    create database ntt
+
+    chown -R www-data:www-data /data/www/ntt.web88.vn/
+    chown -R www-data:www-data /data/www/ntt.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/ntt.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/ntt.web88.vn/wp-admin
+-------------------------------
+<VirtualHost *:80>
+    ServerName lp_istar.web88.vn
+    ServerAlias www.lp_istar.web88.vn
+    
+    DocumentRoot /data/www/lp_istar.web88.vn
+    ErrorLog /var/log/apache2/lp_istar.web88.vn_error.log
+    CustomLog /var/log/apache2/lp_istar.web88.vn_access.log combined
+    
+ <Directory "/data/www/lp_istar.web88.vn/">
+    Options FollowSymLinks
+    AllowOverride All
+    Allow from all
+    Require all granted
+ </Directory>
+</VirtualHost>
+
+-------------------------
+
+nguyentatthanhtx.edu.vn
+
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON nguyentatthanh.* To 'nguyentatthanh'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u nguyentatthanh -p
+    sonnb@Dev3005VPS
+    create database nguyentatthanh
+
+    chown -R www-data:www-data /data/www/nguyentatthanhtx.edu.vn/
+    chown -R www-data:www-data /data/www/nguyentatthanhtx.edu.vn/wp-content
+    chown -R www-data:www-data /data/www/nguyentatthanhtx.edu.vn/wp-includes
+    chown -R www-data:www-data /data/www/nguyentatthanhtx.edu.vn/wp-admin
+----------------------------------------------------
+--------------164 wordpress--------------
+
+create database wp_aomua
+create database wp_art
+create database wp_banhang1
+create database wp_banhang10
+create database wp_banhang11
+create database wp_banhang12
+create database wp_banhang13
+create database wp_banhang14
+create database wp_banhang15
+create database wp_banhang16
+create database wp_banhang17
+create database wp_banhang18
+create database wp_banhang19
+create database wp_banhang2
+create database wp_banhang20
+create database wp_banhang21
+create database wp_banhang22
+create database wp_banhang3
+create database wp_banhang4
+create database wp_banhang5
+create database wp_banhang6
+create database wp_banhang7
+create database wp_banhang8
+create database wp_banhang9
+create database wp_noithat1
+create database wp_noithat2
+create database wp_noithat3
+create database wp_noithat4
+create database wp_noithat5
+create database wp_noithat6
+create database wp_nongsan
+create database wp_nuocgiat
+create database wp_pana
+create database wp_pet
+create database wp_pianocenter
+create database wp_pregmom
+create database wp_remcua
+create database wp_saleca
+create database wp_saleca2
+create database wp_info
+create database wp_items
+
+
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+
+
+create database wp_baohiem
+create database wp_batdongsan1
+create database wp_batdongsan2
+create database wp_batdongsan3
+create database wp_batdongsan4
+create database wp_batdongsan5
+create database wp_batdongsan6
+create database wp_batdongsan7
+create database wp_batdongsan8
+create database wp_bbq
+create database wp_beauty
+create database wp_benhvien
+create database wp_bienchucdanh
+create database wp_bongda
+create database wp_book
+create database wp_camera
+create database wp_camera2
+create database wp_caritas
+create database wp_caycanh1
+create database wp_caycanh2
+create database wp_caycanh3
+create database wp_caycanh4
+create database wp_clinic
+create database wp_daytrangdiem
+create database wp_dichvubaove
+create database wp_dienmay1
+create database wp_dienmay2
+create database wp_dienmay3
+create database wp_dochoi
+create database wp_docu
+create database wp_dongphuc
+create database wp_english
+create database wp_flower
+create database wp_foody
+create database wp_funiture
+create database wp_furniture
+create database wp_giacongcokhi1
+create database wp_gioithieucongty1
+create database wp_gioithieucongty2
+create database wp_gom
+create database wp_greenbay
+create database wp_hydrogen
+create database wp_ifan
+create database wp_ifix
+create database wp_inanthietke1
+create database wp_inanthietke2
+create database wp_inanthietke3
+create database wp_inbat
+create database wp_kientruc
+create database wp_luxury
+create database wp_manhrem
+create database wp_marketing
+create database wp_matong
+create database wp_matong2
+create database wp_mayloc
+create database wp_maylockhi
+create database wp_maylockhi2
+create database wp_mevabe
+create database wp_mica
+create database wp_mica2
+create database wp_mobiplus
+create database wp_motocare
+create database wp_nhahang
+create database wp_nhakhoa
+create database wp_saoviet
+create database wp_shoes
+create database wp_sieuthi
+create database wp_smart
+create database wp_suadienthoai
+create database wp_sukien1
+create database wp_sukien2
+create database wp_sukien3
+create database wp_sukien4
+create database wp_teky
+create database wp_thammyvien1
+create database wp_thammyvien2
+create database wp_thammyvien3
+create database wp_thammyvien4
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+create database wp_banhang1
+
+-------------------------------------
+
+    mysql -u root -p
+    anhquoc12@123$#VPS@@
+    create database wp_noithat1;
+    create database wp_noithat2;
+    create database wp_noithat3;
+    create database wp_noithat4;
+    create database wp_noithat5;
+    create database wp_noithat6;
+
+    show databases;
+    use wp_noithat1;
+    source /data/www/wp/noithat1/noithat1.sql
+    use wp_noithat2;
+    source /data/www/wp/noithat2/noithat2.sql
+    use wp_noithat3;
+    source /data/www/wp/noithat3/noithat3.sql
+    use wp_noithat4;
+    source /data/www/wp/noithat4/noithat4.sql
+    use wp_noithat5;
+    source /data/www/wp/noithat5/noithat5.sql
+    use wp_noithat6;
+    source /data/www/wp/noithat6/noithat6.sql
+    exit;
+
+    chown -R www-data:www-data /data/www/wp/noithat1/
+    chown -R www-data:www-data /data/www/wp/noithat1/wp-content
+    chown -R www-data:www-data /data/www/wp/noithat1/wp-includes
+    chown -R www-data:www-data /data/www/wp/noithat1/wp-admin
+
+    chown -R www-data:www-data /data/www/wp/noithat2/
+    chown -R www-data:www-data /data/www/wp/noithat2/wp-content
+    chown -R www-data:www-data /data/www/wp/noithat2/wp-includes
+    chown -R www-data:www-data /data/www/wp/noithat2/wp-admin
+
+    chown -R www-data:www-data /data/www/wp/noithat3/
+    chown -R www-data:www-data /data/www/wp/noithat3/wp-content
+    chown -R www-data:www-data /data/www/wp/noithat3/wp-includes
+    chown -R www-data:www-data /data/www/wp/noithat3/wp-admin
+
+    chown -R www-data:www-data /data/www/wp/noithat4/
+    chown -R www-data:www-data /data/www/wp/noithat4/wp-content
+    chown -R www-data:www-data /data/www/wp/noithat4/wp-includes
+    chown -R www-data:www-data /data/www/wp/noithat4/wp-admin
+
+    chown -R www-data:www-data /data/www/wp/noithat5/
+    chown -R www-data:www-data /data/www/wp/noithat5/wp-content
+    chown -R www-data:www-data /data/www/wp/noithat5/wp-includes
+    chown -R www-data:www-data /data/www/wp/noithat5/wp-admin
+
+    chown -R www-data:www-data /data/www/wp/noithat6/
+    chown -R www-data:www-data /data/www/wp/noithat6/wp-content
+    chown -R www-data:www-data /data/www/wp/noithat6/wp-includes
+    chown -R www-data:www-data /data/www/wp/noithat6/wp-admin
+
+    1v.com.vn
+    chown -R www-data:www-data /data/www/1v.com.vn/
+    chown -R www-data:www-data /data/www/1v.com.vn/wp-content
+    chown -R www-data:www-data /data/www/1v.com.vn/wp-includes
+    chown -R www-data:www-data /data/www/1v.com.vn/wp-admin
+
+
+--------------
+car.web88.vn
+    mysql -u root -p
+    anhquoc12@123$#VPS@@
+    GRANT ALL PRIVILEGES ON car.* To 'car'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u car -p
+    sonnb@Dev3005VPS
+    create database car;
+
+    chown -R www-data:www-data /data/www/car.web88.vn/
+    chown -R www-data:www-data /data/www/car.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/car.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/car.web88.vn/wp-admin
+
+
+
+
+-------------
+demon.web88.vn
+     mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON letravelauthgo.* To 'letravelauthgo'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u letravelauthgo -p
+    sonnb@Dev3005VPS
+    create database letravelauthgo
+
+    7. Cấp quyền cho thư mục
+    chown -R www-data:www-data /data/www/demon.web88.vn/
+    chown -R www-data:www-data /data/www/demon.web88.vn/assets/
+    chown -R www-data:www-data /data/www/demon.web88.vn/node_modules/
+    chown -R www-data:www-data /data/www/demon.web88.vn/public/
+    chown -R www-data:www-data /data/www/demon.web88.vn/views
+-------------------
+hrcacademy.edu.vn
+
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON hrc.* To 'hrc'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u hrc -p
+    sonnb@Dev3005VPS
+    create database hrc;
+
+    chown -R www-data:www-data /data/www/hrcacademy.edu.vn/
+    chown -R www-data:www-data /data/www/hrcacademy.edu.vn/wp-content
+    chown -R www-data:www-data /data/www/hrcacademy.edu.vn/wp-includes
+    chown -R www-data:www-data /data/www/hrcacademy.edu.vn/wp-admin
+------------------------
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON seotop.* To 'seotop'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u seotop -p
+    sonnb@Dev3005VPS
+    create database seotop;
+
+    chown -R www-data:www-data /data/www/seotop.web88.vn/
+    chown -R www-data:www-data /data/www/seotop.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/seotop.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/seotop.web88.vn/wp-admin
+
+------------------------
+    chown -R www-data:www-data /data/www/fashion.web88.vn/
+
+
+------------------
+freelancer.web88.vn
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON freelancer.* To 'freelancer'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u freelancer -p
+    sonnb@Dev3005VPS
+    create database freelancer;
+
+    chown -R www-data:www-data /data/www/freelancer.web88.vn/storage/
+    chown -R www-data:www-data /data/www/freelancer.web88.vn/resources/
+    chown -R www-data:www-data /data/www/freelancer.web88.vn/public/
+    chown -R www-data:www-data /data/www/freelancer.web88.vn/
+-----------------
+http://drone.uzip.online/
+    . source code: https://github.com/towerk63/uzipsite.git
+
+    chown -R www-data:www-data /data/www/drone.uzip.online/
+
+
+-------------
+http://drone.uzip.solutions/
+    . source code: https://github.com/towerk63/uzipsite.git
+
+    chown -R www-data:www-data /data/www/drone.uzip.solutions/
+
+----------------
+test.istarenglish.edu.vn
+    mysql -u root -p
+    sonnb@Dev#3005%/VPS^^
+    GRANT ALL PRIVILEGES ON testistarenglish.* To 'testistarenglish'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+    exit;
+    mysql -u testistarenglish -p
+    sonnb@Dev3005VPS
+    create database testistarenglish;
+
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/storage/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/resources/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/public/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/
+
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/asset/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/bootstrap/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/css/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/js/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/images/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/Themes/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/uploads/
+    chown -R www-data:www-data /data/www/test.istarenglish.edu.vn/
+-------------
+dienthoai.cf
+
+-------------
+http://wp-mobiplus.web88.vn/
+    mysql -u root -p
+    anhquoc12@123$#VPS@@
+    create database wp_mobiplus;
+    use wp_mobiplus;
+    source /data/www/wp/mobiplus.sql;
+    show databases;
+    exit;
+
+    chown -R www-data:www-data /data/www/wp/wp-mobiplus.web88.vn/
+    chown -R www-data:www-data /data/www/wp/wp-mobiplus.web88.vn/wp-content
+    chown -R www-data:www-data /data/www/wp/wp-mobiplus.web88.vn/wp-includes
+    chown -R www-data:www-data /data/www/wp/wp-mobiplus.web88.vn/wp-admin
+
+-----------------
+http://wp-dienmay1.web88.vn/
+    mysql -u root -p
+    anhquoc12@123$#VPS@@
+    create database wp_dienmay1;
+    use wp_dienmay1;
+    source /data/www/wp/dienmay1.sql;
+    show databases;
+    exit;
+
+    chown -R www-data:www-data /data/www/wp/dienmay1/
+    chown -R www-data:www-data /data/www/wp/dienmay1/wp-content
+    chown -R www-data:www-data /data/www/wp/dienmay1/wp-includes
+    chown -R www-data:www-data /data/www/wp/dienmay1/wp-admin
+
+----------------
+http://wp-dienmay2.web88.vn/
+    mysql -u root -p
+    anhquoc12@123$#VPS@@
+    create database wp_dienmay2;
+    use wp_dienmay2;
+    source /data/www/wp/dienmay2.sql;
+    show databases;
+    exit;
+
+    chown -R www-data:www-data /data/www/wp/dienmay2/
+    chown -R www-data:www-data /data/www/wp/dienmay2/wp-content
+    chown -R www-data:www-data /data/www/wp/dienmay2/wp-includes
+    chown -R www-data:www-data /data/www/wp/dienmay2/wp-admin
+
+
+----------
+http://wp-dienmay3.web88.vn/
+    mysql -u root -p
+    anhquoc12@123$#VPS@@
+    create database wp_dienmay3;
+    use wp_dienmay3;
+    source /data/www/wp/dienmay3.sql;
+    show databases;
+    exit;
+
+    chown -R www-data:www-data /data/www/wp/dienmay3/
+    chown -R www-data:www-data /data/www/wp/dienmay3/wp-content
+    chown -R www-data:www-data /data/www/wp/dienmay3/wp-includes
+    chown -R www-data:www-data /data/www/wp/dienmay3/wp-admins
+
+---------

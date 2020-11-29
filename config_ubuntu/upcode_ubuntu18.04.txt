@@ -1,0 +1,208 @@
+---------------------------------------------------
+B1: trỏ domain !.
+B2: cấu hình trỏ về thư mục trên server.:
+	Code web lưu ở: /data/www
+	------------------------------------------------------------------------------------------------------
+
+	+Nội dung file cấu hình apache2  để trỏ về thư mục web: 
+	    . cấu trúc file:  ten_mien.conf    VD: suntone.web88.vn.conf
+	    . File cấu hình lưu ở: /etc/apache2/sites-enabled/
+	Nội dung file ten_mien.conf như sau Đối với tên miền CHƯA có đăng ký SSL ( SSL là chứng chỉ bảo mật):
+		----------
+		#listen 80
+		<VirtualHost *:80>
+		    ServerName sonnbdev.tk
+		    ServerAlias www.sonnbdev.tk
+
+		    DocumentRoot /data/www/sonnbdev.tk
+		    ErrorLog /var/log/apache2/sonnbdev.tk_error.log
+		    CustomLog /var/log/apache2/sonnbdev.tk_access.log combined
+
+		 <Directory "/data/www/sonnbdev.tk/">
+		    Options FollowSymLinks
+		    AllowOverride All
+		    Order allow,deny
+		    Allow from all
+		    Require all granted
+		 </Directory>
+		</VirtualHost>
+	 	--------------------------------
+	Nội dung file ten_mien.conf như sau Đối với tên miền CÓ đăng ký SSL ( SSL là chứng chỉ bảo mật):
+	 	-------------
+
+		#listen 443
+		<VirtualHost *:443>
+		    ServerName siti.vn
+		    ServerAlias www.siti.vn
+
+		    DocumentRoot /data/www/siti.vn/public
+		    ErrorLog /var/log/apache2/siti.vn_error.log
+		    CustomLog /var/log/apache2/siti.vn_access.log combined
+
+		    SSLEngine on
+		    SSLCertificateFile /etc/ssl/certs/siti.vn.pem
+		    SSLCertificateKeyFile /etc/ssl/private/siti.vn.key
+		 <Directory "/data/www/siti.vn/public/">
+		    Options FollowSymLinks
+		    AllowOverride All
+		    Allow from all
+		    Require all granted
+		 </Directory>
+		</VirtualHost>
+----------------------------------
+B3: restart lai apache2 bằng lệnh:
+		service apache2 restart
+
+B4: tạo thư mục code của web nằm trong /data/www
+		Ví dụ : suntone.web88.vn (đường dẫn : /data/www/suntone.web88.vn)
+
+B5: upcode vào thư mục đó
+		1. Nếu đẩy từ git thì dùng các lệnh sau:
+			tu tai khoan root gõ các lệnh như sau
+			. b1. cd <duong_dan_den_thu_muc_web>. 
+			    ví dụ:  cd /data/www/demo.web88.vn/
+			. b2. git init
+			. b3. git remote add origin duong_dan_github
+			. b4. git remote -v
+			. b5. git pull origin master
+
+		2. Nếu up code bằng file .zip thì tải file .zip lên và giải nén file đó.
+			Lệnh giải nén và nén thư mục:
+			. 0.1. Cài môi trường trên ubuntu để server có thẻ đọc ghi được file .zip
+			    # sudo apt-get install zip unzip
+			. 0.2. truy cập vào thư mục chứa thư mục cần nén:
+				cd duong_dan_web
+			. 1.1 Nén một thư mục, sử dụng:
+			    # zip -r folder.zip folder
+			. 1.2 Giải nén, sử dụng:
+			    # unzip file.zip
+			. 1.3 Giải nén thư mục của mình sang một file khác
+    			# unzip my_photos.zip -d ./my_directory/
+
+		3. Với Wordpress để đỡ rắc rối e dùng plugin Duplicator tạo bản sao. thì sẽ ko phải sửa db của nó.
+			. b1: truy cập vào admin và login với đường dẫn: ten_mien/wp-admin
+			. b2: Nhìn trên thanh menu sidebar -> chọn "Plugin" -> Cài Plugin
+			. b3: tìm kiếm và cài đặt Plugin: Duplicator.
+			. b4: tạo bản sao với plugin
+			. b5: tải xuống 2 file installer.php và ten_file_code.zip
+			. b6: đưa vào thư mục mới để tạo web mới /data/www/ten_mien_website/
+			. b7: tạo db ở (B6) và phân quyền ở (B7).
+			. b8: tiến hành truy cập và cài đặt với url: ten_mien_website/installer.php
+		4. Với wordpress không Duplicator tạo bản sao. thì update code bằng file zip và giải nén như mục (2.)
+
+----------------------------------------------
+B6: tiến hành tạo csdl
+	------Mẫu-------------
+		mysql -u root -p 		//truy cập tai khoan mysql với tên là root
+	    password_tai_khoan_root 	//Mật khẩu của tài khoản root
+	    SHOW DATABASES; // sau het cos bao nhieu databases trong mysql
+	    USE ten_database; // truy caapj vaof trong ten_database ddos
+	    GRANT ALL PRIVILEGES ON ten_user_database.* To 'ten_user_database'@'localhost' IDENTIFIED BY 'pass_user_database';	//tại user quản ly rieng 1 database
+	    exit;								//Lệnh thoát
+	    mysql -u ten_user_database -p 		//truy cập tai khoan mysql với tên vừa đặt ten_user_database
+	    pass_user_database					//NHập password vừa tạo ở lệnh trên
+	    create database ten_database 		//Tạo database mới
+    ----Ví dụ-----------------
+	    mysql -u root -p
+	    sonnb@Dev#3005%/VPS^^
+	    GRANT ALL PRIVILEGES ON holuuvietnam.* To 'holuuvietnam'@'localhost' IDENTIFIED BY 'sonnb@Dev3005VPS';
+	    exit;
+	    mysql -u holuuvietnam -p
+	    sonnb@Dev3005VPS
+	    create database holuuvietnam
+
+---------------------
+	Ngoài ra, Có một số lệnh cơ bản trong mysql:
+        CAU LENH SQL CO BAN
+		1. INSERT db:
+		    INSERT INTO `banners`(`id`, `banner`, `content`, `url`, `product_id`, `location`) VALUES ('2','1572583034_product_sungvanbulong.jpg','','http://haithu.com/loaisanpham/sung-van-bulong-vit-hoi-2019-08-14-083332html','8','2');
+		2. truy van
+		    SELECT * FROM bz_options WHERE option_name='home';  //truy van dien hinh
+		3. Xoa databases
+		    mysql -u ten_csdl_cua_ban -p
+		    mat_khau_csdl
+		    show databases;
+		    use ten_csdl;
+		    drop database teb_csdl_can_xoa;
+		4. import file .sql
+
+		    B1:CREATE DATABASE n_vietnails;
+		    B2:use n_vietnails;
+		    B3:source /data/www/vietnails.cf/VietNails_VIP.sql;
+		    B4:SHOW TABLES;
+
+		    source /data/www/demo.web88.vn/file.sql;
+		    show tables; // hiển thị bảng dữ liệu có trong datases đó
+		5. export file .sql trên server
+		.  thoát khỏi mysql chạy đén noi cần lưu file 
+		.  dùng lện  lệnh 
+		.   mysqldump -u root -p --all-databases >n_vietnail.sql
+		    mysqldump -u [username] -p [database name] > [database name].sql
+		    vd: mysqldump -u n_vietnails -p n_vietnails > n_vietnails.sql
+		    . mysqldump -u n_vietnails -p n_vietnails > /data/www/n_vietnails.sql
+
+		6. Tạo user và thiết lập quyền cho user
+		    Sử dụng lệnh sau để thiết lập đầy đủ các quyền cho một user
+		        grant all on dbname.* to username@localhost;
+
+		    Tất nhiên trong thực tế chắc chắn bạn cần giới hạn một số quyền của user, khi đó hãy sử dụng lệnh sau
+		        grant SELECT on dbname.* to username@localhost; // SELECT là quyền
+
+		    Danh sách các quyền bạn có thể thiết lập cho user
+		        ALL                         INDEX
+		        ALTER                       GRANT OPTION
+		        CREATE VIEW                 DROP
+		        CREATE                      DELETE
+		        INSERT                      SELECT
+		        SHOW VIEW                   TRIGGER
+		        UPDATE
+
+		    Sau khi thiết lập các quyền cho user, bạn cần làm thêm một việc là thiết lập mật khẩu cho user
+		        set password for username@localhost = password('mat_khau');
+
+---------------
+---------------------------------------------------------------------
+B7. Cấp quyền cho thư mục
+		1. Với dự án LARAVEL:
+
+			chown -R www-data:www-data /data/www/holuuvietnam.vn/storage/
+			chown -R www-data:www-data /data/www/holuuvietnam.vn/resources/
+			chown -R www-data:www-data /data/www/holuuvietnam.vn/public/
+			chown -R www-data:www-data /data/www/holuuvietnam.vn/
+
+		2. Với dự án WORDPRESS:
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/wp-content
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/wp-includes
+			chown -R www-data:www-data /data/www/ngongocanh.web88.vn/wp-admin
+
+		3. Lưu ý: Một số con web clone của a hải gửi thì có thể nó sẽ ko theo cấu trúc này đâu anh nhé. Lúc đấy từ biến phân quyền cho các thư mục
+--------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+-------------------------
+
+//////////
+1. Tạo người dùng bằng lệnh
+		sudo useradd [Chức năng] <tên người dùng>
+ Một số chức năng:
+ 	+ -p password hoặc sudo paswd <ten_nguoi_dung>:// tạo password cho người dùng
+ 	+ -c "<comment_bình luận của bạn>": mọi thông tin được nhập phải được đặt trong dấu "..."
+ 	+ -d /home/directory: Tạo thư mục home cho người dùng, có thể để tên thư mục khác, nếu ko khai báo chi tiết hệ thống sẽ mặc định tạo thư mục home cho người dùng đó.
+ 	+ -e yyy-mm-dd: Xác định ngày tài khoản người dùng bị vô hiệu hóa.
+ 	+ -f yyyy-mm-dd: Số ngày password sẽ vô hiệu hóa khi tài khoản hết hạn.
+ 	+ -g group: Xác định người dùng thuộc nhóm nào trong hệ thống.
+ 	+ -G group: Xác định tài khoản người dùng thuộc những nhóm nào trên hệ thống, vì người dùng có thể thuộc nhiều nhóm khác nhau.
+ 	+ -s shell: Xác định shell mặc định cho người dùng khi đăng nhập hệ thống. Ví dụ shell của root là /bin/bash.
+ 	+ -u uid: Xác định số UID của người dùng.
+
+
+2. Các lệnh hay dùng kiểm tra thông số kỹ thuật trên server cài hệ điều hành ubuntu 18.04
+
+	+ Kiểm tra RAM:
+		free -h
+	+ Kiểm tra CPU:
+		uname -a
+
+---------------------
+
+
