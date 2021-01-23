@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>299554632124-j0b6cs7tngrtd8oafbrokhqt0dusrp57.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.299554632124-j0b6cs7tngrtd8oafbrokhqt0dusrp57</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>299554632124-o8oss9dto56hveoltg64sdbhn8uhskl8.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDcRJPQU4mdy5VFHshMVMw4MM6bIc3ECjM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>299554632124</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>dcv.englishcentral.edu.vn</string>
+	<key>PROJECT_ID</key>
+	<string>englishcentral-989b7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>englishcentral-989b7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:299554632124:ios:5ad5edf366524c8b467bb9</string>
+</dict>
+</plist>
